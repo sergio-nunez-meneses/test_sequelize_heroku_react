@@ -32,7 +32,15 @@ export default class FarmersMap extends React.Component {
   // create random markers
   randomMarkers = (length) => {
     for(let i = 0; i < length; i++) {
-      this.state.markers.push({id: i, title: 'Best Place', description: 'Description' + i, coordinates: { latitude: this.minMaxRandom(47, 47.1), longitude: this.minMaxRandom(3.1, 3.2)}});
+      this.state.markers.push({
+        id: i,
+        title: 'Best Place',
+        description: 'Description' + i,
+        coordinates: {
+          latitude: this.minMaxRandom(47, 47.1),
+          longitude: this.minMaxRandom(3.1, 3.2)
+        }
+      });
     }
 
     this.setState({ markers: this.state.markers });
@@ -43,7 +51,10 @@ export default class FarmersMap extends React.Component {
       (markers) =>
       <Marker
         key={markers.id}
-        coordinate={{ latitude: markers.coordinates.latitude, longitude: markers.coordinates.longitude }}
+        coordinate={{
+          latitude: markers.coordinates.latitude,
+          longitude: markers.coordinates.longitude
+        }}
         title={markers.title}
         description={markers.description}
       >
@@ -69,7 +80,10 @@ export default class FarmersMap extends React.Component {
       (data) =>
       <Marker
         key={data.id}
-        coordinate={{ latitude: this.minMaxRandom(47, 47.1), longitude: this.minMaxRandom(3.1, 3.2) }}
+        coordinate={{
+          latitude: this.minMaxRandom(47, 47.1),
+          longitude: this.minMaxRandom(3.1, 3.2)
+        }}
         title={data.name}
         description={data.address}
       >
