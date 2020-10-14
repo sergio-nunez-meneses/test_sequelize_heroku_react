@@ -2,38 +2,50 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  Alert,
   TextInput,
   Text,
   TouchableOpacity,
+  Button
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-export default class InsertFarmer extends React.Component {
+export default class EditFarmer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      TextInput_name: '',
-      TextInput_address: '',
-      TextInput_city: '',
-      TextInput_coordinates: ''
-    }
-  }
 
-  insertFarmer = () => {
-    fetch('https://gerundio-farmers.herokuapp.com/API/insertFarmer',
+    const { route , navigation } = this.props;
+    const { id, name, address, city, coordinates } = route.params;
+
+    this.state = {
+      id: '',
+      name: '',
+      address: '',
+      city: '',
+      coordinates: '',
+      name_input: name,
+      address_input: address,
+      city_input: city,
+      coordinates_input: coordinates
+    }
+  };
+
+  editFarmer = () => {
+    const { route , navigation } = this.props;
+    const { id, name, address, city, coordinates } = route.params;
+
+    fetch('https://gerundio-farmers.herokuapp.com/API/editFarmer/' + id,
     {
-      method: 'POST',
+      method: 'PUT',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Accept':'application/json',
+        'Content-Type':'application/json'
       },
       body: JSON.stringify({
-        name: this.state.TextInput_name,
-        address: this.state.TextInput_address,
-        city: this.state.TextInput_city,
-        coordinates: this.state.TextInput_coordinates
+        name: this.state.name_input,
+        address: this.state.address_input,
+        city: this.state.city_input,
+        coordinates: this.state.coordinates_input,
       })
     })
       .then((response) => response.json())
@@ -43,52 +55,51 @@ export default class InsertFarmer extends React.Component {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   home = () => {
     this.props.navigation.navigate('Home');
   }
 
   render() {
+    const { route , navigation } = this.props;
+    const { id, name, address, city, coordinates } = route.params;
+
     return (
       <View style={styles.MainContainer}>
         <View style={styles.FormContainer}>
-          <Text style={{marginBottom: 8, fontSize: 20, textAlign: 'center', textTransform: 'uppercase'}}> insert farmer </Text>
+          <Text style={{marginBottom: 8, fontSize: 20, textAlign: 'center', textTransform: 'uppercase'}}> edit farmer {JSON.stringify(id)}</Text>
           <TextInput
             placeholder="name"
-            onChangeText={ TextInputValue => this.setState({
-              TextInput_name: TextInputValue
-            }) }
+            defaultValue = {name}
+            onChangeText={text => this.setState({ name_input: text })}
             underlineColorAndroid='transparent'
             style={styles.TextInputStyleClass}
           />
           <TextInput
             placeholder="address"
-            onChangeText={ TextInputValue => this.setState({
-              TextInput_address: TextInputValue
-            }) }
+            defaultValue = {address}
+            onChangeText={text => this.setState({ address_input: text })}
             underlineColorAndroid='transparent'
             style={styles.TextInputStyleClass}
           />
           <TextInput
             placeholder="city"
-            onChangeText={ TextInputValue => this.setState({
-              TextInput_city: TextInputValue
-            }) }
+            defaultValue = {city}
+            onChangeText={text => this.setState({ city_input: text })}
             underlineColorAndroid='transparent'
             style={styles.TextInputStyleClass}
           />
           <TextInput
             placeholder="coordinates"
-            onChangeText={ TextInputValue => this.setState({
-              TextInput_coordinates: TextInputValue
-            })}
+            defaultValue = {coordinates}
+            onChangeText={text => this.setState({ coordinates_input: text })}
             underlineColorAndroid='transparent'
             style={styles.TextInputStyleClass}
           />
           <TouchableOpacity
             activeOpacity = { .4 }
-            style={styles.TouchableOpacitySubmitStyle} onPress={this.insertFarmer}
+            style={styles.TouchableOpacitySubmitStyle} onPress={this.editFarmer}
           >
             <Text style={styles.TextStyle}> submit </Text>
           </TouchableOpacity>
