@@ -18,6 +18,10 @@ export default class Home extends React.Component {
     this.props.navigation.navigate('SignUp');
   }
 
+  farmersMap = () => {
+    this.props.navigation.navigate('FarmersMap');
+  }
+
   farmersList = () => {
     this.props.navigation.navigate('FarmersList');
   }
@@ -34,6 +38,13 @@ export default class Home extends React.Component {
           style={styles.TouchableOpacityStyle} onPress={this.signUp}
         >
           <Text style={styles.TextStyle}> sign up </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity = { .4 }
+          style={styles.TouchableOpacityStyle} onPress={this.farmersMap}
+        >
+          <Text style={styles.TextStyle}> show farmers map </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
