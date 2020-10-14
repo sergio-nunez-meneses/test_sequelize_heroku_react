@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
   TouchableOpacityContainer: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
     backgroundColor: '#fff'
   },

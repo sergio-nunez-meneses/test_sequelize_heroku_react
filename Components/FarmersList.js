@@ -42,12 +42,24 @@ export default class FarmersList extends React.Component {
             data={this.state.data}
             keyExtractor={({ id }, index) => id.toString()}
             renderItem={({ item }) => (
-              <View>
-                <Text style={styles.DataStyle}>{item.id}</Text>
-                <Text style={styles.DataStyle}>{item.name}</Text>
+              <View style={{marginVertical: 5}}>
+                <TouchableOpacity
+                  style={{ backgroundColor: '#0058b8'}}
+                  onPress={() => {
+                    navigation.navigate('EditFarmer', {
+                      id: item.id,
+                      name: item.name,
+                      address: item.address,
+                      city: item.city,
+                      coordinates: item.coordinates
+                    });
+                }}>
+                  {/* <Text style={styles.DataStyle}>{item.id}</Text> */}
+                  <Text style={styles.DataStyle}>{item.name}</Text>
+                </TouchableOpacity>
                 <Text style={styles.DataStyle}>{item.address}</Text>
                 <Text style={styles.DataStyle}>{item.city}</Text>
-                <Text style={styles.DataStyle}>{item.coordinates}</Text>
+                {/* <Text style={styles.DataStyle}>{item.coordinates}</Text> */}
               </View>
             )}
           />
@@ -75,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   FormContainer: {
-    flex: 2,
+    flex: 3,
     alignItems: 'center',
     width: '100%',
     backgroundColor: '#fff'
@@ -101,7 +113,9 @@ const styles = StyleSheet.create({
   },
   DataStyle: {
     borderWidth: 1,
-    borderColor: '#ff0000',
+    borderColor: '#ddd',
+    paddingHorizontal: 80,
+    paddingVertical: 5,
     color:'#000',
     textAlign:'center',
     textTransform: 'uppercase'
