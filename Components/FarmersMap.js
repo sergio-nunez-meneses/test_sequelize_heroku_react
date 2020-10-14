@@ -20,44 +20,22 @@ export default class FarmersMap extends React.Component {
         latitudeDelta: 0.045,
         longitudeDelta: 0.045,
       },
-      markers: [
-        {
-          coordinate: {
-            latitude: this.minMaxRandom(47, 47.1),
-            longitude: this.minMaxRandom(3.1, 3.2),
-          },
-          title: "Best Place",
-          description: "Description1",
-          id: 1
-        },
-        {
-          coordinate: {
-            latitude: this.minMaxRandom(47, 47.1),
-            longitude: this.minMaxRandom(3.1, 3.2),
-          },
-          title: "Best Place",
-          description: "Description2",
-          id: 2
-        }
-      ],
+      markers: [],
       data: []
     }
   }
 
-  getFarmers = async() => {
-    const response = await fetch('https://gerundio-farmers.herokuapp.com/API/displayAll');
-    const farmers = await response.json();
-    this.setState({ data: farmers.farmers });
-  };
+  minMaxRandom = (min, max) => {
+    return Math.random() * (max - min + 1) + min;
+  }
 
-  componentDidMount = async() => {
-    const response = await fetch('https://gerundio-farmers.herokuapp.com/API/displayAll');
-    const farmers = await response.json();
-    this.setState({ data: farmers.farmers });
-  };
+  // create random markers
+  randomMarkers = (length) => {
+    for(let i = 0; i < length; i++) {
+      this.state.markers.push({id: i, title: 'Best Place', description: 'Description' + i, coordinates: { latitude: this.minMaxRandom(47, 47.1), longitude: this.minMaxRandom(3.1, 3.2)}});
+    }
 
-  randomMarkers = () => {
-    //
+    this.setState({ markers: this.state.markers });
   }
 
   mapMarkers = () => {
@@ -65,13 +43,26 @@ export default class FarmersMap extends React.Component {
       (markers) =>
       <Marker
         key={markers.id}
-        coordinate={{ latitude: markers.coordinate.latitude, longitude: markers.coordinate.longitude }}
+        coordinate={{ latitude: markers.coordinates.latitude, longitude: markers.coordinates.longitude }}
         title={markers.title}
         description={markers.description}
       >
       </Marker>
     )
   }
+
+  // fetch markers from API
+  getFarmers = async() => {
+    const response = await fetch('https://gerundio-farmers.herokuapp.com/API/displayAll');
+    const farmers = await response.json();
+    this.setState({ data: farmers.farmers });
+  };
+
+  componentDidMount = () => {
+    this.getFarmers();
+    this.randomMarkers(10);
+    console.log(this.state.markers);
+  };
 
   farmerMarkers = () => {
     return this.state.data.map(
@@ -84,10 +75,6 @@ export default class FarmersMap extends React.Component {
       >
       </Marker>
     )
-  }
-
-  minMaxRandom = (min, max) => {
-    return Math.random() * (max - min + 1) + min;
   }
 
   home = () => {
@@ -111,7 +98,7 @@ export default class FarmersMap extends React.Component {
           showsCompass={true}
           style={{ flex: 10, alignItems: 'center' }}
         >
-          {this.farmerMarkers()}
+          {this.mapMarkers()}
         </MapView>
         <View style={styles.TouchableOpacityStyleContainer}>
           {/* <TextInput
