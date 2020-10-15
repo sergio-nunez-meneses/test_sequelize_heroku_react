@@ -42,7 +42,8 @@ export default class SignUp extends React.Component {
       })
       .catch((error) => {
         console.error(error);
-      });
+      })
+      .finally(() => { this.props.navigation.navigate('FarmersList') });
   }
 
   home = () => {
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   FormContainer: {
-    flex: 1,
+    flex: 3,
     alignItems: 'center',
     width: '100%',
     backgroundColor: '#fff'

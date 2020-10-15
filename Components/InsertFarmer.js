@@ -22,6 +22,8 @@ export default class InsertFarmer extends React.Component {
   }
 
   insertFarmer = () => {
+    const { route, navigation } = this.props;
+
     fetch('https://gerundio-farmers.herokuapp.com/API/insertFarmer',
     {
       method: 'POST',
@@ -42,7 +44,9 @@ export default class InsertFarmer extends React.Component {
       })
       .catch((error) => {
         console.error(error);
-      });
+      })
+      .finally(() => { this.props.navigation.navigate('FarmersList') });
+
   }
 
   home = () => {
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   FormContainer: {
-    flex: 1,
+    flex: 3,
     alignItems: 'center',
     width: '100%',
     backgroundColor: '#fff'

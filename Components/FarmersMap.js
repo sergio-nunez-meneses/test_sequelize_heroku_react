@@ -7,6 +7,7 @@ import {
   TextInput
 } from 'react-native';
 import MapView, { Marker } from "react-native-maps";
+import * as Location from 'expo-location';
 
 export default class FarmersMap extends React.Component {
   constructor(props) {
@@ -71,8 +72,7 @@ export default class FarmersMap extends React.Component {
 
   componentDidMount = () => {
     this.getFarmers();
-    this.randomMarkers(10);
-    console.log(this.state.markers);
+    this.randomMarkers(20);
   };
 
   farmerMarkers = () => {
@@ -81,12 +81,15 @@ export default class FarmersMap extends React.Component {
       <Marker
         key={data.id}
         coordinate={{
-          latitude: this.minMaxRandom(47, 47.1),
-          longitude: this.minMaxRandom(3.1, 3.2)
+          latitude: parseFloat(data.coordinates.split(',')[0]),
+          longitude: parseFloat(data.coordinates.split(',')[1])
         }}
         title={data.name}
-        description={data.address}
+        description={data.address + ', ' + data.city}
       >
+        {/* <View style={{ flex: 2, borderWidth: 1, borderColor: '#ddd', padding: 10, backgroundColor: '#0058b8'}}>
+          <Text>{data.name}</Text>
+        </View> */}
       </Marker>
     )
   }
@@ -112,7 +115,8 @@ export default class FarmersMap extends React.Component {
           showsCompass={true}
           style={{ flex: 10, alignItems: 'center' }}
         >
-          {this.mapMarkers()}
+          {/* {this.mapMarkers()} */}
+          {this.farmerMarkers()}
         </MapView>
         <View style={styles.TouchableOpacityStyleContainer}>
           {/* <TextInput

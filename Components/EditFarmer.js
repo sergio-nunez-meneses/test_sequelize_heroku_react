@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
+  Alert,
   View,
   TextInput,
   Text,
@@ -14,7 +15,7 @@ export default class EditFarmer extends React.Component {
   constructor(props) {
     super(props);
 
-    const { route , navigation } = this.props;
+    const { route, navigation } = this.props;
     const { id, name, address, city, coordinates } = route.params;
 
     this.state = {
@@ -23,6 +24,7 @@ export default class EditFarmer extends React.Component {
       address: '',
       city: '',
       coordinates: '',
+      id_input: id,
       name_input: name,
       address_input: address,
       city_input: city,
@@ -31,7 +33,7 @@ export default class EditFarmer extends React.Component {
   };
 
   editFarmer = () => {
-    const { route , navigation } = this.props;
+    const { route, navigation } = this.props;
     const { id, name, address, city, coordinates } = route.params;
 
     fetch('https://gerundio-farmers.herokuapp.com/API/editFarmer/' + id,
@@ -42,19 +44,45 @@ export default class EditFarmer extends React.Component {
         'Content-Type':'application/json'
       },
       body: JSON.stringify({
+        // id: this.state.id_input,
         name: this.state.name_input,
         address: this.state.address_input,
         city: this.state.city_input,
         coordinates: this.state.coordinates_input,
       })
     })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        Alert.alert(responseJson);
+      .then((response) => response.text())
+      .then((responseData) => {
+        Alert.alert(responseData);
+        console.log(responseData);
       })
       .catch((error) => {
         console.error(error);
-      });
+      })
+      .finally(() => { this.props.navigation.navigate('FarmersList') });
+  };
+
+  deleteFarmer = () => {
+    const { route, navigation } = this.props;
+    const { id } = route.params;
+
+    fetch('https://gerundio-farmers.herokuapp.com/API/deleteFarmer/' + id,
+    {
+      method: 'DELETE',
+      headers: {
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        Alert.alert(responseJson);
+        console.log(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => { this.props.navigation.navigate('FarmersList') });
   };
 
   home = () => {
@@ -62,7 +90,7 @@ export default class EditFarmer extends React.Component {
   }
 
   render() {
-    const { route , navigation } = this.props;
+    const { route, navigation } = this.props;
     const { id, name, address, city, coordinates } = route.params;
 
     return (
@@ -103,6 +131,12 @@ export default class EditFarmer extends React.Component {
           >
             <Text style={styles.TextStyle}> submit </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity = { .4 }
+            style={styles.TouchableOpacitySubmitStyle} onPress={this.deleteFarmer}
+          >
+            <Text style={styles.TextStyle}> delete </Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.TouchableOpacityContainer}>
@@ -127,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   FormContainer: {
-    flex: 1,
+    flex: 3,
     alignItems: 'center',
     width: '100%',
     backgroundColor: '#fff'
